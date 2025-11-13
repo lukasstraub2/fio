@@ -47,6 +47,7 @@ static void free_thread_options_to_cpu(struct thread_options *o)
 	free(o->ioscheduler);
 	free(o->profile);
 	free(o->cgroup);
+	free(o->invalidate_vm_drop_caches);
 
 	free(o->verify_pattern);
 	free(o->buffer_pattern);
@@ -94,6 +95,7 @@ int convert_thread_options_to_cpu(struct thread_options *o,
 	string_to_cpu(&o->ioscheduler, top->ioscheduler);
 	string_to_cpu(&o->profile, top->profile);
 	string_to_cpu(&o->cgroup, top->cgroup);
+	string_to_cpu(&o->invalidate_vm_drop_caches, top->invalidate_vm_drop_caches);
 	string_to_cpu(&o->dp_scheme_file, top->dp_scheme_file);
 
 	o->allow_create = le32_to_cpu(top->allow_create);
@@ -408,6 +410,7 @@ void convert_thread_options_to_net(struct thread_options_pack *top,
 	string_to_net(top->ioscheduler, o->ioscheduler);
 	string_to_net(top->profile, o->profile);
 	string_to_net(top->cgroup, o->cgroup);
+	string_to_net(top->invalidate_vm_drop_caches, o->invalidate_vm_drop_caches);
 	string_to_net(top->dp_scheme_file, o->dp_scheme_file);
 
 	top->allow_create = cpu_to_le32(o->allow_create);

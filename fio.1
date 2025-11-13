@@ -1707,6 +1707,11 @@ starting I/O if the platform and file type support it. Defaults to true.
 This will be ignored if \fBpre_read\fR is also specified for the
 same job.
 .TP
+.BI invalidate_vm_drop_caches \fR=\fPstr
+If this option is set and \fBinvalidate\fR is enabled, invalidate the
+page cache by writing the specified value to \fB/proc/sys/vm/drop_caches\fR.
+See man \fBproc\fR\|(5).
+.TP
 .BI sync \fR=\fPstr
 Whether, and what type, of synchronous I/O to use for writes.  The allowed
 values are:

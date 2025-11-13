@@ -1895,6 +1895,12 @@ Buffers and memory
 	This will be ignored if :option:`pre_read` is also specified for the
 	same job.
 
+.. option:: invalidate_vm_drop_caches=str
+
+	If this option is set and :option:`invalidate` is enabled, invalidate the
+	page cache by writing the specified value to ``/proc/sys/vm/drop_caches``.
+	See :manpage:`proc(5)`.
+
 .. option:: sync=str
 
 	Whether, and what type, of synchronous I/O to use for writes.  The allowed

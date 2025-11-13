@@ -4324,6 +4324,15 @@ struct fio_option fio_options[FIO_MAX_OPTS] = {
 		.group	= FIO_OPT_G_IO_TYPE,
 	},
 	{
+		.name	= "invalidate_vm_drop_caches",
+		.lname	= "Invalidate with /proc/sys/vm/drop_caches",
+		.type	= FIO_OPT_STR_STORE,
+		.off1	= offsetof(struct thread_options, invalidate_vm_drop_caches),
+		.help	= "Write the specified value to /proc/sys/vm/drop_caches",
+		.category = FIO_OPT_C_IO,
+		.group	= FIO_OPT_G_IO_TYPE,
+	},
+	{
 		.name	= "sync",
 		.lname	= "Synchronous I/O",
 		.type	= FIO_OPT_STR,

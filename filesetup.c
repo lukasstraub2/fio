@@ -574,6 +574,7 @@ static int __file_invalidate_cache(struct thread_data *td, struct fio_file *f,
 				   unsigned long long len)
 {
 	int errval = 0, ret = 0;
+	struct thread_options *o = &td->o;
 
 #ifdef CONFIG_ESX
 	return 0;
@@ -584,10 +585,35 @@ static int __file_invalidate_cache(struct thread_data *td, struct fio_file *f,
 	if (off == -1ULL)
 		off = f->file_offset;
 
-	if (len == -1ULL || off == -1ULL)
+	if ((len == -1ULL || off == -1ULL) && !o->invalidate_vm_drop_caches)
 		return 0;
 
-	if (td->io_ops->invalidate) {
+	if (o->invalidate_vm_drop_caches) {
+		dprint(FD_IO, "invalidate cache with /proc/sys/vm/drop_caches\n");
+		ret = open("/proc/sys/vm/drop_caches", O_WRONLY);
+		if (ret < 0 && errno == EACCES && geteuid()) {
+			if (!fio_did_warn(FIO_WARN_ROOT_FLUSH)) {
+				log_err("fio: only root may invalidate caches "
+					"with /proc/sys/vm/drop_caches. Skipping invalidation.\n");
+			}
+		}
+		if (ret < 0) {
+			errval = errno;
+		} else {
+			ssize_t len = strlen(o->invalidate_vm_drop_caches);
+			ssize_t len_ret;
+			int fd = ret;
+
+			len_ret = write(fd, o->invalidate_vm_drop_caches, len);
+			if (len_ret < 0) {
+				errval = errno;
+			} else if (len_ret != len) {
+				log_err("fio: write /proc/sys/vm/drop_caches: short write\n");
+			}
+
+			close(fd);
+		}
+	} else if (td->io_ops->invalidate) {
 		dprint(FD_IO, "invalidate %s cache %s\n", td->io_ops->name,
 			f->file_name);
 		ret = td->io_ops->invalidate(td, f);

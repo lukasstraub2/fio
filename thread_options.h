@@ -133,6 +133,7 @@ struct thread_options {
 	unsigned int odirect;
 	unsigned int oatomic;
 	unsigned int invalidate_cache;
+	char *invalidate_vm_drop_caches;
 	unsigned int create_serialize;
 	unsigned int create_fsync;
 	unsigned int create_on_open;
@@ -471,6 +472,7 @@ struct thread_options_pack {
 	uint32_t odirect;
 	uint32_t oatomic;
 	uint32_t invalidate_cache;
+	uint8_t invalidate_vm_drop_caches[8];
 	uint32_t create_serialize;
 	uint32_t create_fsync;
 	uint32_t create_on_open;
